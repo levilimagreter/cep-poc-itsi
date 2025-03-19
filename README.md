@@ -65,11 +65,15 @@ O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manual
 
 ### **Passos para instalar o ITSI via CLI**
 
-1️⃣ **Certifique-se de que o arquivo ITSI (`.spl`) está no diretório correto**:
+1️⃣ **Certifique-se de que o arquivo ITSI (`.spl`) está no diretório correto e sua permissão de execução**:
    ```bash
    ls -lha /home/splunkuser/splunk-it-service-intelligence_4200.spl
    ```
-   Se o arquivo não estiver lá, faça o download conforme orientações anteriores.
+   Se o arquivo não estiver lá, faça o download conforme orientações anteriores. Para colocar permissão de execução:
+
+   ```bash
+   sudo chmod +x /home/splunkuser/splunk-it-service-intelligence_4200.spl
+   ```
 
 2️⃣ **Extraia o ITSI na pasta de aplicativos do Splunk**:
    ```bash
