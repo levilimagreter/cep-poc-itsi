@@ -161,22 +161,36 @@ Para esta POC, usaremos os seguintes **data sources**:
    ```bash
    python3 install_cisco_asa.py
    ```
-7. **Verifique se os eventos estão chegando ao Splunk:**
+7. **Adicionando o data source com o sourcetype correto**:
+     - Acesse **Settings > Data Inputs > Files & Directories > New Local File & Directory**.
+     - File or Directory > /tmp/cisco_asa_simulated.log
+     - Com a opção > Constinuosly Monitor
+     - Host field value > cisco-asa
+     - Source type > cisco:asa
+     - Time Stamp format > ```%b %d %Y %H:%M:%S```
+     - criar um index > network
+   
+8. **Verifique se os eventos estão chegando ao Splunk:**
    ```bash
    sudo -u splunkuser /opt/splunk/bin/splunk search "index=firewall sourcetype=cisco:asa"
    ```
-
 ---
 
 ### **Configuração do Data Source Linux (Monitoramento do Host)**
 1️⃣ **Acesse o Splunk Web** e vá até:
-   ```Settings > Data Inputs```
+   - ```Apps > Manage Apps```
+   - Procure por ```Splunk Add-on for Unix and Linux```
+   - Clique em setup
 
-2️⃣ **Adicione os seguintes inputs no Local Performance Monitoring**:
-   - ✅ CPU
-   - ✅ Memória
-   - ✅ Disco
-   - ✅ Processos ativos
+2️⃣ **Adicione os seguintes "Scripted Metric Inputs" no Local Performance Monitoring**:
+   - ✅ cpu_metric.sh
+   - ✅ df_metric.sh
+   - ✅ interfaces_metric.sh
+   - ✅ iostat_metric.sh
+   - ✅ ps_metric.sh
+   - ✅ vmstat_metric.sh
+
+   - O index é o ```itsi_im_metrics```
 
 3️⃣ **Confirme se os eventos estão sendo coletados corretamente:**
    ```bash
