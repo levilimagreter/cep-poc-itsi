@@ -143,23 +143,25 @@ Para esta POC, usaremos os seguintes **data sources**:
    ```bash
    ls -lha /home/splunkuser
    ```
+   
    splunk-add-on-for-cisco-asa_520.tgz  `-rwxr-xr-x. 1 splunkuser splunkuser`
+   
    splunk-add-on-for-unix-and-linux_1000.tgz  `-rwxr-xr-x. 1 splunkuser splunkuser`
    
-3. **Navegue até a pasta dos scripts:**
+4. **Navegue até a pasta dos scripts:**
    ```bash
    cd /home/splunker/cep-poc-itsi/scripts
    ```
-4. **Verifique a permissão de execução do script de configuração:**
+5. **Verifique a permissão de execução do script de configuração:**
    ```bash
    sudo chmod +x python3 install_cisco_asa.py
    ls -lha
    ```
-5. **Executando o script**:
+6. **Executando o script**:
    ```bash
    python3 install_cisco_asa.py
    ```
-6. **Verifique se os eventos estão chegando ao Splunk:**
+7. **Verifique se os eventos estão chegando ao Splunk:**
    ```bash
    sudo -u splunkuser /opt/splunk/bin/splunk search "index=firewall sourcetype=cisco:asa"
    ```
