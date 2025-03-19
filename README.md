@@ -104,7 +104,7 @@ O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manual
 2. **Definição de Permissões de Usuários:**
    - Acesse **Settings > Access Controls > Roles**.
    - Crie ou modifique os papéis para garantir que usuários relevantes tenham permissões para visualizar e gerenciar o ITSI.
-   - Adicione os usuários corretos ao grupo `itsi_admin` ou `itsi_user`, conforme necessário.
+   - Adicione os usuários corretos ao grupo, um novo usuario chamado `analyst` ao `itoa_admin` e outro chamado `user` associado ao `itoa_user`.
 
 3. **Inicialização do KV Store:**
    - Execute o seguinte comando para verificar o status do KV Store:
