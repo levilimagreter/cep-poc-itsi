@@ -31,39 +31,31 @@ def create_splunk_user():
     os.system("sudo usermod -aG wheel splunkuser")
     print("Usuário splunkuser criado e adicionado ao grupo sudo.")
 
-def download_splunk():
-    """Baixa o Splunk Enterprise na versão especificada."""
-    print("Baixando Splunk Enterprise...")
-    os.system("sudo -u splunkuser wget -O /home/splunkuser/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz 'https://download.splunk.com/products/splunk/releases/9.4.1/linux/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz'")
-    print("Download concluído.")
-
-def set_permissions():
-    """Define permissões no arquivo baixado."""
-    print("Definindo permissões no arquivo de instalação do Splunk...")
-    os.system("sudo chmod +x /home/splunkuser/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz")
-    print("Permissões definidas.")
-
 def prepare_installation():
-    """Cria o diretório de instalação e ajusta permissões."""
+    """Cria o diretório de instalação e ajusta permissões corretamente."""
     print("Criando diretório /opt/splunk e configurando permissões...")
+    os.system("sudo rm -rf /opt/splunk")  # Remove diretório antigo para garantir um novo setup
     os.system("sudo mkdir -p /opt/splunk")
     os.system("sudo chown -R splunkuser:splunkuser /opt/splunk")
-    print("Diretório /opt/splunk pronto.")
+    os.system("sudo chmod -R 755 /opt/splunk")
+    print("Diretório /opt/splunk pronto e com permissões ajustadas.")
 
 def install_splunk():
-    """Extrai e instala o Splunk."""
+    """Extrai e instala o Splunk dentro do diretório correto."""
     print("Extraindo e instalando Splunk...")
-    os.system("sudo -u splunkuser tar -xzvf /home/splunkuser/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz -C /opt")
-    print("Instalação concluída.")
+    os.system("sudo -u splunkuser tar -xzvf /home/splunker/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz -C /opt")
+    print("Instalação do Splunk concluída.")
 
 def create_admin_user():
-    """Cria o usuário admin no Splunk automaticamente."""
+    """Cria o usuário admin no Splunk automaticamente com permissões adequadas."""
     print("Criando usuário admin para o Splunk...")
     user_seed_path = "/opt/splunk/etc/system/local/user-seed.conf"
     os.system("sudo mkdir -p /opt/splunk/etc/system/local")
-    with open(user_seed_path, "w") as f:
-        f.write("[user_info]\nUSERNAME = admin\nPASSWORD = splunkuser\n")
-    os.system(f"sudo chown splunkuser:splunkuser {user_seed_path}")
+    os.system("echo '[user_info]' | sudo tee {0} > /dev/null".format(user_seed_path))
+    os.system("echo 'USERNAME = admin' | sudo tee -a {0} > /dev/null".format(user_seed_path))
+    os.system("echo 'PASSWORD = splunkuser' | sudo tee -a {0} > /dev/null".format(user_seed_path))
+    os.system("sudo chown splunkuser:splunkuser {0}".format(user_seed_path))
+    os.system("sudo chmod 600 {0}".format(user_seed_path))
     print("Usuário admin criado com sucesso!")
 
 def start_splunk():
@@ -74,16 +66,24 @@ def start_splunk():
     os.system("sudo /opt/splunk/bin/splunk enable boot-start -user splunkuser --accept-license --answer-yes --no-prompt")
     print("Splunk iniciado e configurado para iniciar no boot.")
 
+def get_splunk_web_url():
+    """Captura dinamicamente o IP do servidor para acesso ao Splunk Web."""
+    result = subprocess.run(["hostname", "-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    ip_address = result.stdout.split()[0] if result.stdout else "[IP_NAO_ENCONTRADO]"
+    splunk_url = f"http://{ip_address}:8000"
+    print("\n\n=== SPLUNK WEB INTERFACE ===")
+    print(f"Acesse o Splunk Web copiando e colando o seguinte link:\n{splunk_url}\n")
+
 def main():
     check_and_install_firewalld()
     configure_firewall()
     create_splunk_user()
-    download_splunk()
-    set_permissions()
     prepare_installation()
     install_splunk()
     start_splunk()
     print("Instalação do Splunk Enterprise concluída com sucesso!")
+    print("Os alunos deverão seguir os passos do guia para instalação manual do ITSI.")
+    get_splunk_web_url()
 
 if __name__ == "__main__":
     main()
