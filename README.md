@@ -52,17 +52,42 @@ O ITSI pode ser baixado das seguintes formas:
 
 #### Aplicação da Licença
 Após receber a licença de ITSI:
-1. Acesse a **Splunk Web UI** (porta padrão `8000`).
-2. Navegue até **Settings > Licensing**.
-3. Clique em **Add License** e faça o upload do arquivo `.lic` recebido.
-4. Confirme que a licença foi aplicada corretamente.
+1. Acesse o Splunk Web via navegador.
+2. Faça login com as credenciais:
+   - **Usuário**: `admin`
+   - **Senha**: `splunkuser`
+3. Navegue até **Settings > Licensing**.
+4. Clique em **Add license** e faça o upload do arquivo `license.lic`.
+5. Confirme a ativação da licença.
 
 #### Configuração Inicial do ITSI
-1. Acesse o Splunk Web e vá até **Apps > IT Service Intelligence**.
-2. Na tela inicial, conclua o **ITSI Setup Wizard**, que inclui:
-   - Configuração de índices.
-   - Definição de permissões de usuários.
-   - Inicialização do KV Store para armazenar metadados.
+O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manualmente na pasta correta.
+
+### **Passos para instalar o ITSI via CLI**
+
+1️⃣ **Certifique-se de que o arquivo ITSI (`.spl`) está no diretório correto**:
+   ```bash
+   ls -lha /home/splunkuser/splunk-it-service-intelligence_4200.spl
+   ```
+   Se o arquivo não estiver lá, faça o download conforme orientações anteriores.
+
+2️⃣ **Extraia o ITSI na pasta de aplicativos do Splunk**:
+   ```bash
+   sudo -u splunkuser tar -xvf /home/splunkuser/splunk-it-service-intelligence_4200.spl -C /opt/splunk/etc/apps/
+   ```
+
+3️⃣ **Corrija as permissões para o Splunk acessar corretamente**:
+   ```bash
+   sudo chown -R splunkuser:splunkuser /opt/splunk/etc/apps/itsi
+   ```
+
+4️⃣ **Reinicie o Splunk para aplicar a instalação**:
+   ```bash
+   sudo -u splunkuser /opt/splunk/bin/splunk restart
+   ```
+
+5️⃣ **Após a reinicialização, acesse o ITSI no Splunk Web**:
+   - Navegue até **Apps > IT Service Intelligence** para concluir a configuração inicial.
 
 ##### Configuração Detalhada
 1. **Configuração de Índices:**
@@ -86,7 +111,6 @@ Após receber a licença de ITSI:
      ```bash
      $ splunk restart splunkd
      ```
-
 ---
 
 ### 3. Ingestão de Dados
