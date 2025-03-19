@@ -121,132 +121,188 @@ O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manual
      ```
 ---
 
-### 3. Ingestão de Dados
-Para esta POC, usaremos os seguintes **data sources**:
+### 3. Estrutura da Árvore de Serviços
+# **POC ITSI - Simulação de Serviços e KPIs**
 
-✅ **Cisco ASA**: Será disponibilizado um **script em Python** no GitHub para facilitar a instalação e configuração no ambiente.
-✅ **Linux Host (próprio servidor do Splunk)**: Captura de métricas nativas do sistema operacional.
-
-### **Configuração do Data Source Cisco ASA**
-📌 O script Python será responsável por:
-- Configurar o envio de logs do **Cisco ASA** para o Splunk via **syslog**.
-- Criar os **inputs necessários** no Splunk automaticamente.
-- Configurar **parsing adequado** dos eventos.
-- **Local do script**: `/scripts` dentro deste repositório.
-
-#### **Execução do Script Cisco ASA**
-1. **Navegue até a pasta home:**
-   ```bash
-   cd /home/splunkuser
-   ```
-2. **Verifique a permissão de execussão para os apps:**
-   ```bash
-   ls -lha /home/splunkuser
-   ```
-   
-   splunk-add-on-for-cisco-asa_520.tgz  `-rwxr-xr-x. 1 splunkuser splunkuser`
-   
-   splunk-add-on-for-unix-and-linux_1000.tgz  `-rwxr-xr-x. 1 splunkuser splunkuser`
-   
-4. **Navegue até a pasta dos scripts:**
-   ```bash
-   cd /home/splunker/cep-poc-itsi/scripts
-   ```
-5. **Verifique a permissão de execução do script de configuração:**
-   ```bash
-   sudo chmod +x python3 install_cisco_asa.py
-   ls -lha
-   ```
-6. **Executando o script**:
-   ```bash
-   python3 install_cisco_asa.py
-   ```
-7. **Adicionando o data source com o sourcetype correto**:
-     - Acesse **Settings > Data Inputs > Files & Directories > New Local File & Directory**.
-     - File or Directory > /tmp/cisco_asa_simulated.log
-     - Com a opção > Constinuosly Monitor
-     - Host field value > cisco-asa
-     - Source type > cisco:asa
-     - Time Stamp format > ```%b %d %Y %H:%M:%S```
-     - criar um index > network
-   
-8. **Verifique se os eventos estão chegando ao Splunk:**
-   ```bash
-   sudo -u splunkuser /opt/splunk/bin/splunk search "index=firewall sourcetype=cisco:asa"
-   ```
----
-
-### **Configuração do Data Source Linux (Monitoramento do Host)**
-1️⃣ **Acesse o Splunk Web** e vá até:
-   - ```Apps > Manage Apps```
-   - Procure por ```Splunk Add-on for Unix and Linux```
-   - Clique em setup
-
-2️⃣ **Adicione os seguintes "Scripted Metric Inputs" no Local Performance Monitoring**:
-   - ✅ cpu_metric.sh
-   - ✅ df_metric.sh
-   - ✅ interfaces_metric.sh
-   - ✅ iostat_metric.sh
-   - ✅ ps_metric.sh
-   - ✅ vmstat_metric.sh
-
-   - O index é o ```itsi_im_metrics```
-
-3️⃣ **Confirme se os eventos estão sendo coletados corretamente:**
-   ```bash
-   sudo -u splunkuser /opt/splunk/bin/splunk search "index=_internal source=*metrics.log"
-   ```
-
-📌 **Dica:** Caso os dados não apareçam, reinicie o Splunk:
-```bash
-sudo -u splunkuser /opt/splunk/bin/splunk restart
-
-#### Configuração do Data Source Cisco ASA
-O script Python será responsável por:
-- Configurar o envio de logs do Cisco ASA para o Splunk via syslog.
-- Criar os inputs necessários no Splunk automaticamente.
-- Configurar parsing adequado dos eventos.
-
-Os detalhes da execução estarão disponíveis no diretório `/scripts` deste repositório.
-
-#### Configuração do Data Source Linux
-1. No Splunk, vá até **Settings > Data Inputs**.
-2. Selecione **Local Performance Monitoring** e adicione os seguintes inputs:
-   - CPU
-   - Memória
-   - Disco
-   - Processos ativos
-3. Verifique os eventos no índice `_internal` para confirmar que os dados estão sendo coletados corretamente.
+## **Objetivo**
+Este documento define a estrutura de uma **POC** para o **Splunk ITSI**, baseada em uma arquitetura de um **site monolítico** com serviços fictícios e KPIs simulados. O objetivo é fornecer um ambiente de testes prático para **parceiros SEs** aprenderem a configurar **serviços, KPIs e árvores de dependências** no ITSI sem necessidade de dados reais.
 
 ---
 
-### 4. Criação de Árvores de Serviço
-- Conceitos e estrutura das árvores de serviço no ITSI.
-- Criação de um exemplo básico.
-- Configuração de KPIs e thresholds.
+## **Estrutura da Árvore de Serviços**
+A POC será baseada em uma aplicação monolítica, onde cada serviço representa um componente essencial do sistema:
 
-### 5. Criação de Regra de Detecção de Anomalia
-- Definição de um caso de uso baseado em logs de firewall.
-- Implementação de uma regra de anomalia utilizando Machine Learning Toolkit (MLTK) ou ITSI Anomaly Detection.
-- Testes e validação da regra.
+### **Serviços e KPIs**
+1. **Frontend Web**
+   - **KPIs:**
+     - CPU Usage
+     - Memory Usage
+     - HTTP Response Time
+     - HTTP Errors (4xx, 5xx)
+   - **Dependência:** Backend API
 
-## Requisitos
-- Acesso a um ambiente Linux (Ubuntu/CentOS recomendado).
-- Conta Splunk para download dos pacotes.
-- Licença válida para o ITSI.
+2. **Backend API**
+   - **KPIs:**
+     - CPU Usage
+     - Memory Usage
+     - Request Count
+     - Error Rate
+   - **Dependência:** Database & Authentication Service
 
-## Estrutura do Repositório
-- `/scripts` - Scripts para instalação e configuração automatizada.
-- `/datasets` - Arquivos de logs de firewall para testes.
-- `/docs` - Documentação detalhada de cada etapa.
-- `/configs` - Arquivos de configuração do Splunk e ITSI.
+3. **Database**
+   - **KPIs:**
+     - CPU Usage
+     - Disk I/O
+     - Query Response Time
+     - Active Connections
+   - **Dependência:** Storage
 
-## Próximos Passos
-1. Criar scripts de instalação do Splunk e ITSI.
-2. Desenvolver o script Python para ingestão de logs do Cisco ASA.
-3. Criar templates de árvores de serviço.
-4. Implementar a regra de detecção de anomalias.
+4. **Authentication Service**
+   - **KPIs:**
+     - CPU Usage
+     - Failed Logins
+     - Authentication Latency
+   - **Dependência:** Database
+
+5. **Storage**
+   - **KPIs:**
+     - Disk Usage
+     - Read/Write Latency
+     - Available Space
+   - **Dependência:** Nenhuma (base da infraestrutura)
+
+### **Hierarquia da Árvore de Serviços**
+```
+          Frontend Web
+               |
+         Backend API
+          /       \
+  Authentication   Database
+         |           |
+       Database    Storage
+```
+- O **Frontend Web** depende do **Backend API**.
+- O **Backend API** depende do **Authentication Service** e do **Database**.
+- O **Database** depende do **Storage**.
+- O **Storage** é a base da infraestrutura.
 
 ---
-Esse guia será atualizado conforme o desenvolvimento do projeto. Contribuições são bem-vindas!
+
+# **POC ITSI - Simulação de Serviços e KPIs**
+
+## **Objetivo**
+Este documento define a estrutura de uma **POC** para o **Splunk ITSI**, baseada em uma arquitetura de um **site monolítico** com serviços fictícios e KPIs simulados. O objetivo é fornecer um ambiente de testes prático para **parceiros SEs** aprenderem a configurar **serviços, KPIs e árvores de dependências** no ITSI sem necessidade de dados reais.
+
+---
+
+## **Estrutura da Árvore de Serviços**
+A POC será baseada em uma aplicação monolítica, onde cada serviço representa um componente essencial do sistema:
+
+### **Serviços e KPIs**
+1. **Frontend Web**
+   - **KPIs:**
+     - CPU Usage
+     - Latência de Rede
+   - **Dependência:** Backend API
+
+2. **Backend API**
+   - **KPIs:**
+     - CPU Usage
+     - Latência de Rede
+   - **Dependência:** Database & Authentication Service
+
+3. **Database**
+   - **KPIs:**
+     - CPU Usage
+     - Latência de Rede
+   - **Dependência:** Storage
+
+4. **Authentication Service**
+   - **KPIs:**
+     - CPU Usage
+     - Latência de Rede
+   - **Dependência:** Database
+
+5. **Storage**
+   - **KPIs:**
+     - Disk Usage
+     - Read/Write Latency
+     - Available Space
+   - **Dependência:** Nenhuma (base da infraestrutura)
+   - 
+---
+
+### **1. Criar os Serviços no ITSI (Sem Dependências)**
+Os serviços devem ser criados **sem dependências inicialmente**. A vinculação será feita depois, dentro do **Service Analyzer**.
+
+1. Acesse **ITSI > Configuration Assistant**.
+2. Vá para **Service Configuration > Configure Services**.
+3. Create Service > Create Service. Crie os serviços:
+
+* Title: Storage | * Title: Authentication Service | * Title: Database | * Title: Backend API | * Title: Serviços e KPIs
+* Manually add service content
+  
+KPIs
+
+Para cada serviço acima. Vá na guia KPIs > New > Generic KPI
+* Title: Storage CPU_Usage
+
+Ad hoc Search
+```
+| makeresults count=100 
+| streamstats count as time 
+| eval CPU_Usage=round(random()%100,2)
+```
+Threshold Field: CPU_Usage
+
+KPI Search Schedule: Every minute
+
+Unit: %
+
+Configure os **thresholds** para:
+   Critical: 80
+   Hight: 70
+   Medium: 50
+   Low: 40
+
+Para cada serviço acima. Vá na guia KPIs > New > Generic KPI
+* Title: Network Latency
+  
+Ad hoc Search
+```
+| makeresults count=100 
+| streamstats count as time 
+| eval Latency=round(random()%500,2)
+```
+Threshold Field: Latency
+
+KPI Search Schedule: Every minute
+
+Unit: ms
+
+Configure os **thresholds** para:
+   Critical: 50
+   Hight: 40
+   Medium: 30
+   Low: 20
+
+### ** Configurar a Árvore de Dependências no Service Analyzer**
+A configuração das dependências pode ser feita na criação do serviço ou posteriormente. Neste caso vamos fazer posteriormente. Vamos visitar cada serviço criado e ir até a guia Service Dependencies e depois Add dependecies:
+
+1. Acesse **ITSI > Configuration Assistant**.
+2. Vá para **Service Configuration > Storage, Authentication Service, etc**.
+3. Tab Service Dependecies > Para cada serviço faça esta lógica:
+
+Selecionar "CPU Usage", Simulação de Latência de Rede e ServiceHealthScore:
+
+   •	O Frontend Web depende do Backend API.
+	•	O Backend API depende do Authentication Service e do Database.
+	•	O Database depende do Storage.
+	•	O Storage é a base da infraestrutura.
+
+ Vamos até o Service Analyzer olhar como ficou as metricas.
+
+ Agora clique no Tree View. 
+
+ Tome alguns minutos para explorar as metricas e arvore de serviços.
 
