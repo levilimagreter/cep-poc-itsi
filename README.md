@@ -119,66 +119,6 @@ O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manual
      ```bash
      sudo -u splunkuser /opt/splunk/bin/splunk restart splunkd
      ```
----
-
-### 3. Estrutura da Árvore de Serviços
-
-### **Serviços e KPIs**
-1. **Frontend Web**
-   - **KPIs:**
-     - CPU Usage
-     - Memory Usage
-     - HTTP Response Time
-     - HTTP Errors (4xx, 5xx)
-   - **Dependência:** Backend API
-
-2. **Backend API**
-   - **KPIs:**
-     - CPU Usage
-     - Memory Usage
-     - Request Count
-     - Error Rate
-   - **Dependência:** Database & Authentication Service
-
-3. **Database**
-   - **KPIs:**
-     - CPU Usage
-     - Disk I/O
-     - Query Response Time
-     - Active Connections
-   - **Dependência:** Storage
-
-4. **Authentication Service**
-   - **KPIs:**
-     - CPU Usage
-     - Failed Logins
-     - Authentication Latency
-   - **Dependência:** Database
-
-5. **Storage**
-   - **KPIs:**
-     - Disk Usage
-     - Read/Write Latency
-     - Available Space
-   - **Dependência:** Nenhuma (base da infraestrutura)
-
-### **Hierarquia da Árvore de Serviços**
-```
-          Frontend Web
-               |
-         Backend API
-          /       \
-  Authentication   Database
-         |           |
-       Database    Storage
-```
-- O **Frontend Web** depende do **Backend API**.
-- O **Backend API** depende do **Authentication Service** e do **Database**.
-- O **Database** depende do **Storage**.
-- O **Storage** é a base da infraestrutura.
-
----
-
 ## **Estrutura da Árvore de Serviços**
 A POC será baseada em uma aplicação monolítica, onde cada serviço representa um componente essencial do sistema:
 
