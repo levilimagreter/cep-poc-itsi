@@ -1,10 +1,12 @@
+#!/usr/bin/env python3
+
 import os
 import subprocess
 
 def check_and_install_firewalld():
     """Verifica se o firewalld está instalado e o instala se necessário."""
     print("Verificando a presença do firewalld...")
-    firewalld_check = subprocess.run(["rpm", "-q", "firewalld"], capture_output=True, text=True)
+    firewalld_check = subprocess.run(["rpm", "-q", "firewalld"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     
     if "is not installed" in firewalld_check.stdout:
         print("firewalld não encontrado. Instalando...")
@@ -54,9 +56,20 @@ def install_splunk():
     os.system("sudo -u splunkuser tar -xzvf /home/splunkuser/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz -C /opt")
     print("Instalação concluída.")
 
+def create_admin_user():
+    """Cria o usuário admin no Splunk automaticamente."""
+    print("Criando usuário admin para o Splunk...")
+    user_seed_path = "/opt/splunk/etc/system/local/user-seed.conf"
+    os.system("sudo mkdir -p /opt/splunk/etc/system/local")
+    with open(user_seed_path, "w") as f:
+        f.write("[user_info]\nUSERNAME = admin\nPASSWORD = splunkuser\n")
+    os.system(f"sudo chown splunkuser:splunkuser {user_seed_path}")
+    print("Usuário admin criado com sucesso!")
+
 def start_splunk():
     """Inicia o Splunk e configura inicialização no boot."""
     print("Iniciando Splunk...")
+    create_admin_user()
     os.system("sudo -u splunkuser /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt")
     os.system("sudo /opt/splunk/bin/splunk enable boot-start -user splunkuser --accept-license --answer-yes --no-prompt")
     print("Splunk iniciado e configurado para iniciar no boot.")
@@ -74,4 +87,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
