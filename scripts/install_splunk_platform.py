@@ -31,6 +31,12 @@ def create_splunk_user():
     os.system("sudo usermod -aG wheel splunkuser")
     print("Usuário splunkuser criado e adicionado ao grupo sudo.")
 
+def download_splunk():
+    """Baixa o pacote do Splunk."""
+    print("Baixando o Splunk...")
+    os.system("wget -O /home/splunker/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz 'https://download.splunk.com/products/splunk/releases/9.4.1/linux/splunk-9.4.1-e3bdab203ac8-linux-amd64.tgz'")
+    print("Download concluído!")
+
 def prepare_installation():
     """Cria o diretório de instalação e ajusta permissões corretamente."""
     print("Criando diretório /opt/splunk e configurando permissões...")
@@ -78,6 +84,7 @@ def main():
     check_and_install_firewalld()
     configure_firewall()
     create_splunk_user()
+    download_splunk()
     prepare_installation()
     install_splunk()
     start_splunk()
