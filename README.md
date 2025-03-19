@@ -111,11 +111,11 @@ O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manual
 3. **Inicialização do KV Store:**
    - Execute o seguinte comando para verificar o status do KV Store:
      ```bash
-     $  sudo -u splunkuser /opt/splunk/bin/splunk show kvstore-status
+     sudo -u splunkuser /opt/splunk/bin/splunk show kvstore-status
      ```
    - Se necessário, reinicie o KV Store:
      ```bash
-     $ sudo -u splunkuser /opt/splunk/bin/splunk restart splunkd
+     sudo -u splunkuser /opt/splunk/bin/splunk restart splunkd
      ```
 ---
 
