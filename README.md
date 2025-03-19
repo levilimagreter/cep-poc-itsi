@@ -122,15 +122,6 @@ O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manual
 ---
 
 ### 3. Estrutura da Árvore de Serviços
-# **POC ITSI - Simulação de Serviços e KPIs**
-
-## **Objetivo**
-Este documento define a estrutura de uma **POC** para o **Splunk ITSI**, baseada em uma arquitetura de um **site monolítico** com serviços fictícios e KPIs simulados. O objetivo é fornecer um ambiente de testes prático para **parceiros SEs** aprenderem a configurar **serviços, KPIs e árvores de dependências** no ITSI sem necessidade de dados reais.
-
----
-
-## **Estrutura da Árvore de Serviços**
-A POC será baseada em uma aplicação monolítica, onde cada serviço representa um componente essencial do sistema:
 
 ### **Serviços e KPIs**
 1. **Frontend Web**
