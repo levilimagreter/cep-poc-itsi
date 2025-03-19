@@ -122,9 +122,54 @@ O ITSI **não pode ser instalado via Splunk Web**, ele deve ser extraído manual
 ---
 
 ### 3. Ingestão de Dados
-Para esta POC, usaremos os seguintes data sources:
-- **Cisco ASA**: Será disponibilizado um script em Python no GitHub para facilitar a instalação e configuração no ambiente.
-- **Linux Host (próprio servidor do Splunk)**: Captura de métricas nativas do sistema operacional.
+Para esta POC, usaremos os seguintes **data sources**:
+
+✅ **Cisco ASA**: Será disponibilizado um **script em Python** no GitHub para facilitar a instalação e configuração no ambiente.
+✅ **Linux Host (próprio servidor do Splunk)**: Captura de métricas nativas do sistema operacional.
+
+### **Configuração do Data Source Cisco ASA**
+📌 O script Python será responsável por:
+- Configurar o envio de logs do **Cisco ASA** para o Splunk via **syslog**.
+- Criar os **inputs necessários** no Splunk automaticamente.
+- Configurar **parsing adequado** dos eventos.
+- **Local do script**: `/scripts` dentro deste repositório.
+
+#### **Execução do Script Cisco ASA**
+1. **Navegue até a pasta dos scripts:**
+   ```bash
+   cd /home/splunker/cep-poc-itsi/scripts
+   ```
+2. **Execute o script de configuração:**
+   ```bash
+   sudo chmod +x python3 install_cisco_asa.py
+   ls -lha
+   python3 install_cisco_asa.py
+   ```
+3. **Verifique se os eventos estão chegando ao Splunk:**
+   ```bash
+   sudo -u splunkuser /opt/splunk/bin/splunk search "index=firewall sourcetype=cisco:asa"
+   ```
+
+---
+
+### **Configuração do Data Source Linux (Monitoramento do Host)**
+1️⃣ **Acesse o Splunk Web** e vá até:
+   ```Settings > Data Inputs```
+
+2️⃣ **Adicione os seguintes inputs no Local Performance Monitoring**:
+   - ✅ CPU
+   - ✅ Memória
+   - ✅ Disco
+   - ✅ Processos ativos
+
+3️⃣ **Confirme se os eventos estão sendo coletados corretamente:**
+   ```bash
+   sudo -u splunkuser /opt/splunk/bin/splunk search "index=_internal source=*metrics.log"
+   ```
+
+📌 **Dica:** Caso os dados não apareçam, reinicie o Splunk:
+```bash
+sudo -u splunkuser /opt/splunk/bin/splunk restart
 
 #### Configuração do Data Source Cisco ASA
 O script Python será responsável por:
