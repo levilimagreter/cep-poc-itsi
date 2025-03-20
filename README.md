@@ -3,8 +3,52 @@
 ## Visão Geral
 Este repositório tem como objetivo fornecer um guia passo a passo para que parceiros Splunk possam aprender a configurar e demonstrar uma POC do IT Service Intelligence (ITSI). O foco é criar um ambiente funcional para monitoramento, correlação de eventos e detecção de anomalias.
 
-## Estrutura do Projeto
-O projeto está dividido nas seguintes fases:
+## Fases do Projeto
+
+1. Instalação do Splunk arquitetura S1.
+2. Instalação do ITSI e licenciamento.
+3. Ingestão de dados.
+4. Criação de árvore de serviço.
+
+## Requisitos de Hardware e Software
+
+- **SO Suportados**: CentOS, RHEL, Ubuntu
+- **Memória**: Mínimo 12GB RAM
+- **CPU**: 24 vCPUs
+- **Armazenamento**: Mínimo 100GB (recomendado 200GB)
+- **Rede**: Acesso à internet para baixar pacotes
+
+## Links de Referência
+
+Para garantir uma instalação e configuração corretas, consulte os seguintes links:
+
+- [Documentação Oficial do Splunk Enterprise](https://docs.splunk.com/Documentation/Splunk)
+- [Guia de Instalação do ITSI](https://docs.splunk.com/Documentation/ITSI)
+- [Download do Splunk](https://www.splunk.com/en_us/download.html)
+- [Requisitos do ITSI](https://docs.splunk.com/Documentation/ITSI/latest/Install/DeploymentPlanning)
+- [Administração de Firewalls para Splunk](https://docs.splunk.com/Documentation/Splunk/latest/Admin/Networkports)
+
+## Detalhamento das Dependências
+
+Antes de iniciar a instalação, certifique-se de que os seguintes pacotes estão instalados:
+
+```bash
+sudo yum install -y wget curl tar unzip firewalld
+```
+
+Caso esteja utilizando Ubuntu/Debian, use:
+
+```bash
+sudo apt update && sudo apt install -y wget curl tar unzip firewalld
+```
+
+Certifique-se de que o `firewalld` está ativo:
+
+```bash
+sudo systemctl enable firewalld --now
+```
+
+Agora o ambiente está preparado para a instalação do Splunk.
 
 ### 1. Instalação do Splunk (Arquitetura S1)
 #### Requisitos de Hardware e Software
