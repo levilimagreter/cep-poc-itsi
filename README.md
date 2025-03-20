@@ -264,3 +264,52 @@ Selecionar "CPU Usage", Simulação de Latência de Rede e ServiceHealthScore:
 
  Tome alguns minutos para explorar as metricas e arvore de serviços.
 
+ Próximos Passos para Configurar um Alarme no ITSI
+
+O objetivo é criar um alarme baseado nos KPIs simulados, que será agrupado nos Episódios (Episodes View) no ITSI.
+
+⸻
+
+1️⃣ Criar um Trigger Condition em um KPI
+	1.	Vá para ITSI > Configuration > Services.
+	2.	Selecione um dos serviços criados (exemplo: Backend API).
+	3.	Vá para a aba KPIs e escolha um KPI (exemplo: CPU Usage).
+	4.	Clique em Edit KPI e role até Trigger Conditions.
+	5.	Adicione um novo trigger:
+	•	Nome: Alerta CPU Alta
+	•	Condição: Se CPU_Usage > 80% então gera um evento notável.
+	•	Gravidade: Critical
+	6.	Salve as configurações.
+
+⸻
+
+2️⃣ Criar um Notable Event Aggregation Policy (NEAP)
+
+Agora precisamos garantir que os eventos gerados pelos KPIs sejam agrupados corretamente nos Episódios.
+	1.	Vá para ITSI > Configuration > Event Management > Aggregation Policies.
+	2.	Clique em New Aggregation Policy.
+	3.	Preencha os detalhes:
+	•	Nome: Alerta CPU Alta
+	•	Description: Política para agrupar alertas de CPU alta.
+	•	Entity Rules: Adicione uma regra para agrupar por entidade (exemplo: host).
+	4.	Vá até Trigger Conditions e adicione:
+	•	IF severity = Critical THEN create notable event.
+	5.	Escolha um grupo de eventos para esse alarme (exemplo: Infrastructure Alerts).
+	6.	Clique em Save.
+
+⸻
+
+3️⃣ Verificar os Episódios Criados
+	1.	Vá para ITSI > Alerts and Episodes.
+	2.	Você verá os episódios sendo criados conforme os alertas são gerados.
+	3.	Se quiser visualizar detalhes, clique no episódio e veja os eventos notáveis agregados.
+
+⸻
+
+4️⃣ (Opcional) Configurar uma Ação Automática
+
+Podemos configurar uma ação automática, como notificação por email ou script.
+	1.	Dentro da Aggregation Policy, vá até Actions.
+	2.	Escolha uma ação, como Send Email ou Run Script.
+	3.	Configure os parâmetros necessários.
+	4.	Salve e teste o alarme.
