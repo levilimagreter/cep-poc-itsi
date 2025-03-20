@@ -10,14 +10,6 @@ Este repositório tem como objetivo fornecer um guia passo a passo para que parc
 3. Ingestão de dados.
 4. Criação de árvore de serviço.
 
-## Requisitos de Hardware e Software
-
-- **SO Suportados**: CentOS, RHEL, Ubuntu
-- **Memória**: Mínimo 12GB RAM
-- **CPU**: 24 vCPUs
-- **Armazenamento**: Mínimo 100GB (recomendado 200GB)
-- **Rede**: Acesso à internet para baixar pacotes
-
 ## Links de Referência
 
 Para garantir uma instalação e configuração corretas, consulte os seguintes links:
