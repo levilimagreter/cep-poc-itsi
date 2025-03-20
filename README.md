@@ -56,7 +56,7 @@ Antes de iniciar a instalação do Splunk, é essencial garantir que o ambiente 
 ##### Hardware Recomendado:
 | Componente      | Requisitos Mínimos |
 |----------------|------------------|
-| CPU           | 16 vCPUs          |
+| CPU           | 24 vCPUs          |
 | Memória RAM   | 12 GB             |
 | Armazenamento | 100 GB SSD        |
 | Rede         | 1 Gbps Ethernet    |
