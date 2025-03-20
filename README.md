@@ -48,8 +48,6 @@ Certifique-se de que o `firewalld` está ativo:
 sudo systemctl enable firewalld --now
 ```
 
-Agora o ambiente está preparado para a instalação do Splunk.
-
 ### 1. Instalação do Splunk (Arquitetura S1)
 #### Requisitos de Hardware e Software
 
